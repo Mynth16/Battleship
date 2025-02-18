@@ -28,7 +28,6 @@ public class Battleship {
         int maxShips = totalGrid - 3;
 
         System.out.print("Enter number of ships: ");
-        int
 
         displayGrid(col, row);
     }
@@ -37,7 +36,7 @@ public class Battleship {
         for (int i = 0; i < col; i++) {
             System.out.println(" ");
             for (int j = 0; j < row; j++) {
-                System.out.print(". ");
+                System.out.print("[" +" " +"]");
             }
         }
     }
