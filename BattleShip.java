@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class BattleShip {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
+    private static final String CENTER = "[CC] ", HIT = "[XX] ", MISS = "[!!] ", EMPTY = "[  ] ";
     private static int col, row;
     private static int[][] grid;
     private static int shipCounter = 0, turnCounter = 0;
@@ -12,15 +13,15 @@ public class BattleShip {
 
     public static void main (String[] args) {
         System.out.print("Enter column length: ");
-        col = getValidatedInt("Invalid input. Please enter an odd number", 1, 3, Integer.MAX_VALUE);
+        col = getValidatedInt(1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
         System.out.print("Enter row length: ");
-        row = getValidatedInt("Invalid input. Please enter an odd number", 1, 3, Integer.MAX_VALUE);
+        row = getValidatedInt( 1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
 
         grid = new int[col][row];
         int maxShips = (col * row) - 3;
 
         System.out.print("Enter number of ships: ");
-        int ships = getValidatedInt("Invalid input. Please enter a number between 1 and " + maxShips, 2, 1, maxShips);
+        int ships = getValidatedInt(2, 1, maxShips, "Invalid input. Please enter a number between 1 and " + maxShips);
         ammo = ships * 2;
 
         initializeGame(ships);
@@ -33,11 +34,11 @@ public class BattleShip {
         }
 
         if (ammo == 0) System.out.println("Game Over! Ammo depleted. \nTotal turns: " + turnCounter);
-        else System.out.println("Game Over! All ships destroyed. \nTotal turns: " + turnCounter);
+        else System.out.println("You won! All ships destroyed. \nTotal turns: " + turnCounter);
     }
 
 
-    private static int getValidatedInt(String errorMessage, int prompt, int min, int max) {
+    private static int getValidatedInt(int prompt, int min, int max, String errorMessage) {
         while (true) {
             try {
                 int input = scanner.nextInt();
@@ -92,13 +93,13 @@ public class BattleShip {
             System.out.println(" ");
             for (int j = 0; j < row; j++) {
                 if (i == col / 2 && j == row / 2) {
-                    System.out.print("[CC] ");  // center
+                    System.out.print(CENTER);
                 }
                 else if (grid[i][j] == 99) {
-                    System.out.print("[XX] ");  // hit
+                    System.out.print(HIT);
                 }
                 else if (grid[i][j] == 98) {
-                    System.out.print("[!!] ");  // miss
+                    System.out.print(MISS);
                     grid[i][j] = 0;
                 }
                 else if (grid[i][j] < 0) {
@@ -106,9 +107,21 @@ public class BattleShip {
                     // (Math.abs(grid[i][j]) turns the set negative number into a positive number
                     // read this as: IF the num is greater than 9, print the num, ELSE print 0 + the num
                 }
-                else System.out.print("[  ] ");
+                else System.out.print(EMPTY);
             }
         }
+    }
+
+
+    private static void runGame() {
+        System.out.print("Enter x coordinate: ");
+        int x = getValidatedInt(3, 0, row - 1, "Invalid input. Please enter a number between 0 and " + (row - 1));
+
+        System.out.print("Enter y coordinate: ");
+        int y = getValidatedInt(3, 0, col - 1, "Invalid input. Please enter a number between 0 and " + (col - 1));
+
+        moveShips();
+        fire(x, y);
     }
 
 
@@ -160,19 +173,6 @@ public class BattleShip {
     }
 
 
-
-    private static void runGame() {
-       System.out.print("Enter x coordinate: ");
-       int x = getValidatedInt("Invalid input. Please enter a number between 0 and " + (row - 1), 3, 0, row - 1);
-
-       System.out.print("Enter y coordinate: ");
-       int y = getValidatedInt("Invalid input. Please enter a number between 0 and " + (col - 1), 3, 0, col - 1);
-
-       moveShips();
-       fire(x, y);
-    }
-
-
     private static void fire(int x, int y) {
         if (grid[y][x] < 0) {
             System.out.println("\nHit!");
@@ -183,12 +183,11 @@ public class BattleShip {
             grid[y][x] = 98;
         }
         displayGrid(col, row);
-        System.out.println("\n");
         ammo--;
-        System.out.println("Remaining Ammo: " + ammo);
+        System.out.println("\nRemaining Ammo: " + ammo);
     }
-    
-    
+
+
     private static boolean gameOver() {
         for (int i = 0; i < col; i++) {
             for (int j = 0; j < row; j++) {
