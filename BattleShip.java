@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class BattleShip {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
-    private static final String CENTER = "[CC] ", HIT = "[XX] ", MISS = "[!!] ", EMPTY = "[  ] ";
+    private static final String CENTER = " CC ", HIT = " XX ", MISS = " !! ", EMPTY = " •  ", BORDER = "----", VERTICAL = "|";
     private static int col, row;
     private static int[][] grid;
     private static int shipCounter = 0, turnCounter = 0;
@@ -89,27 +89,22 @@ public class BattleShip {
 
 
     private static void displayGrid(int col, int row) {
+        System.out.print("   ");
+        for (int j = 0; j < row; j++) System.out.printf(" %2d ", j);
+        System.out.println("\n   " + BORDER.repeat(row));
+
         for (int i = 0; i < col; i++) {
-            System.out.println(" ");
+            System.out.printf("%2d " + VERTICAL, i);
             for (int j = 0; j < row; j++) {
-                if (i == col / 2 && j == row / 2) {
-                    System.out.print(CENTER);
-                }
-                else if (grid[i][j] == 99) {
-                    System.out.print(HIT);
-                }
-                else if (grid[i][j] == 98) {
-                    System.out.print(MISS);
-                    grid[i][j] = 0;
-                }
-                else if (grid[i][j] < 0) {
-                    System.out.print("[" + (Math.abs(grid[i][j]) > 9 ? Math.abs(grid[i][j]) : "0" + Math.abs(grid[i][j])) + "] ");
-                    // (Math.abs(grid[i][j]) turns the set negative number into a positive number
-                    // read this as: IF the num is greater than 9, print the num, ELSE print 0 + the num
-                }
+                if (i == col / 2 && j == row / 2) System.out.print(CENTER);
+                else if (grid[i][j] == 99) System.out.print(HIT);
+                else if (grid[i][j] == 98) System.out.print(MISS);
+                else if (grid[i][j] < 0) System.out.printf(" %02d ", Math.abs(grid[i][j]));
                 else System.out.print(EMPTY);
             }
+            System.out.println(VERTICAL);
         }
+        System.out.println("   " + BORDER.repeat(row));
     }
 
 
