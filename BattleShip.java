@@ -18,7 +18,7 @@ public class BattleShip {
         row = getValidatedInt( 1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
 
         grid = new int[col][row];
-        int maxShips = (col * row) - 3;
+        int maxShips = (col * row) - 4;
 
         System.out.print("Enter number of ships: ");
         int ships = getValidatedInt(2, 1, maxShips, "Invalid input. Please enter a number between 1 and " + maxShips);
@@ -26,7 +26,7 @@ public class BattleShip {
 
         initializeGame(ships);
         displayGrid(col, row);
-        System.out.println("\n");
+        System.out.println(" ");
 
         while (ammo > 0 && !gameOver()) {
             runGame();
@@ -36,7 +36,6 @@ public class BattleShip {
         if (ammo == 0) System.out.println("Game Over! Ammo depleted. \nTotal turns: " + turnCounter);
         else System.out.println("You won! All ships destroyed. \nTotal turns: " + turnCounter);
     }
-
 
     private static int getValidatedInt(int prompt, int min, int max, String errorMessage) {
         while (true) {
@@ -70,11 +69,9 @@ public class BattleShip {
         }
     }
 
-
     private static void initializeGame (int ships) {
         for (int i = 0; i < ships; i++) spawnShip();
     }
-
 
     // sets a random point in the grid to a unique negative number, ignoring the center and duplicates
     private static void spawnShip() {
@@ -87,11 +84,10 @@ public class BattleShip {
         grid[shipY][shipX] = -(++shipCounter);
     }
 
-
     private static void displayGrid(int col, int row) {
         System.out.print("   ");
         for (int j = 0; j < row; j++) System.out.printf(" %2d ", j);
-        System.out.println("\n   " + BORDER.repeat(row));
+        System.out.println("\n   " + BORDER.repeat(row) + "--");
 
         for (int i = 0; i < col; i++) {
             System.out.printf("%2d " + VERTICAL, i);
@@ -104,9 +100,8 @@ public class BattleShip {
             }
             System.out.println(VERTICAL);
         }
-        System.out.println("   " + BORDER.repeat(row));
+        System.out.println("   " + BORDER.repeat(row) + "--");
     }
-
 
     private static void runGame() {
         System.out.print("Enter x coordinate: ");
@@ -118,7 +113,6 @@ public class BattleShip {
         moveShips();
         fire(x, y);
     }
-
 
     // clones the current value of the grid to an adjacent spot then sets the current spot to 0
     private static void moveShips() {
@@ -149,14 +143,12 @@ public class BattleShip {
                             break;
                         }
                     }
-
                     if (!moved) newGrid[i][j] = shipId; // If no move possible, stay in place
                 }
             }
         }
         grid = newGrid;
     }
-
 
     private static void shuffleArray(int[] array) {
         for (int i = array.length - 1; i > 0; i--) {
@@ -166,7 +158,6 @@ public class BattleShip {
             array[index] = temp;
         }
     }
-
 
     private static void fire(int x, int y) {
         if (grid[y][x] < 0) {
@@ -181,7 +172,6 @@ public class BattleShip {
         ammo--;
         System.out.println("\nRemaining Ammo: " + ammo);
     }
-
 
     private static boolean gameOver() {
         for (int i = 0; i < col; i++) {
