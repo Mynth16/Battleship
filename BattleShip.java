@@ -1,3 +1,9 @@
+/* Group members:
+1. Rafael Angelo B. Catimbang
+2. Naifh Abdulrahman P. Al-ehydeb
+3. Russel N. Astor
+4. John Mark A. Meliton
+*/
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
@@ -12,21 +18,14 @@ public class BattleShip {
     private static int ammo = 0;
 
     public static void main (String[] args) {
-        System.out.print("Enter column length: ");
-        col = getValidatedInt(1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
-        System.out.print("Enter row length: ");
-        row = getValidatedInt( 1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
-
+        col = getValidInt("Enter column length: ", 1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
+        row = getValidInt( "Enter row length: ", 1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
         grid = new int[col][row];
+
         int maxShips = (col * row) - 4;
-
-        System.out.print("Enter number of ships: ");
-        int ships = getValidatedInt(2, 1, maxShips, "Invalid input. Please enter a number between 1 and " + maxShips);
+        int ships = getValidInt("Enter number of ships: ", 2, 1, maxShips, "Invalid input. Please enter a number between 1 and " + maxShips);
         ammo = ships * 2;
-
         initializeGame(ships);
-        displayGrid(col, row);
-        System.out.println(" ");
 
         while (ammo > 0 && !gameOver()) {
             runGame();
@@ -37,11 +36,12 @@ public class BattleShip {
         else System.out.println("You won! All ships destroyed. \nTotal turns: " + turnCounter);
     }
 
-    private static int getValidatedInt(int prompt, int min, int max, String errorMessage) {
+    private static int getValidInt(String prompt, int promptNum, int min, int max, String errorMessage) {
         while (true) {
             try {
+                System.out.print(prompt);
                 int input = scanner.nextInt();
-                switch (prompt) {
+                switch (promptNum) {
                     case 1: // grid
                         if (input % 2 == 0) {
                             System.out.println(errorMessage);
@@ -71,6 +71,8 @@ public class BattleShip {
 
     private static void initializeGame (int ships) {
         for (int i = 0; i < ships; i++) spawnShip();
+        displayGrid(col, row);
+        System.out.println(" ");
     }
 
     // sets a random point in the grid to a unique negative number, ignoring the center and duplicates
@@ -93,8 +95,8 @@ public class BattleShip {
             System.out.printf("%2d " + VERTICAL, i);
             for (int j = 0; j < row; j++) {
                 if (i == col / 2 && j == row / 2) System.out.print(CENTER);
-                else if (grid[i][j] == 99) System.out.print(HIT);
-                else if (grid[i][j] == 98) System.out.print(MISS);
+                else if (grid[i][j] == 999) System.out.print(HIT);
+                else if (grid[i][j] == 998) System.out.print(MISS);
                 else if (grid[i][j] < 0) System.out.printf(" %02d ", Math.abs(grid[i][j]));
                 else System.out.print(EMPTY);
             }
@@ -104,11 +106,8 @@ public class BattleShip {
     }
 
     private static void runGame() {
-        System.out.print("Enter x coordinate: ");
-        int x = getValidatedInt(3, 0, row - 1, "Invalid input. Please enter a number between 0 and " + (row - 1));
-
-        System.out.print("Enter y coordinate: ");
-        int y = getValidatedInt(3, 0, col - 1, "Invalid input. Please enter a number between 0 and " + (col - 1));
+        int x = getValidInt("Enter x coordinate: ", 3, 0, row - 1, "Invalid input. Please enter a number between 0 and " + (row - 1));
+        int y = getValidInt("Enter y coordinate: ", 3, 0, col - 1, "Invalid input. Please enter a number between 0 and " + (col - 1));
 
         moveShips();
         fire(x, y);
@@ -162,11 +161,11 @@ public class BattleShip {
     private static void fire(int x, int y) {
         if (grid[y][x] < 0) {
             System.out.println("\nHit!");
-            grid[y][x] = 99;
+            grid[y][x] = 999;
         }
         else {
             System.out.println("\nMiss!");
-            grid[y][x] = 98;
+            grid[y][x] = 998;
         }
         displayGrid(col, row);
         ammo--;
