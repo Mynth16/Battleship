@@ -32,8 +32,8 @@ public class BattleShip {
             turnCounter++;
         }
 
-        if (ammo == 0) System.out.println("Game Over! Ammo depleted. \nTotal turns: " + turnCounter);
-        else System.out.println("You won! All ships destroyed. \nTotal turns: " + turnCounter);
+        if (gameOver()) System.out.println("You won! All ships destroyed. \nTotal turns: " + turnCounter);
+        else System.out.println("Game Over! Ammo depleted. \nTotal turns: " + turnCounter);
     }
 
     private static int getValidInt(String prompt, int promptNum, int min, int max, String errorMessage) {
@@ -49,11 +49,6 @@ public class BattleShip {
                         }
                         break;
                     case 2: // ships
-                        if (input < min || input > max) {
-                            System.out.println(errorMessage);
-                            continue;
-                        }
-                        break;
                     case 3: // coordinates
                         if (input < min || input > max) {
                             System.out.println(errorMessage);
