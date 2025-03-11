@@ -22,9 +22,9 @@ public class BattleShip {
         row = getValidInt( "Enter row length: ", 1, 3, Integer.MAX_VALUE, "Invalid input. Please enter an odd number");
         grid = new int[col][row];
 
-        int maxShips = (col * row) - 4;
+        int maxShips = (col * row) - 3;
         int ships = getValidInt("Enter number of ships: ", 2, 1, maxShips, "Invalid input. Please enter a number between 1 and " + maxShips);
-        ammo = ships * 2;
+        ammo = col * row;
         initializeGame(ships);
 
         while (ammo > 0 && !gameOver()) {
@@ -154,9 +154,14 @@ public class BattleShip {
     }
 
     private static void fire(int x, int y) {
+        grid[col/2][row/2] = 1000;
         if (grid[y][x] < 0) {
             System.out.println("\nHit!");
             grid[y][x] = 999;
+        }
+        else if (grid[y][x] == 1000) {
+            System.out.println("Invalid target");
+            ammo++;
         }
         else {
             System.out.println("\nMiss!");
